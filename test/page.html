@@ -1,0 +1,60 @@
+<!doctype html>
+<!-- Stands in for linkedin.com: the three ways its composers take an image, each showing what it got. -->
+<html>
+  <body>
+    <!-- The post box: its button makes a file input that never joins the page and clicks it. -->
+    <div id="post">
+      <div contenteditable="true"></div>
+      <button aria-label="Add media">+</button>
+      <output></output>
+    </div>
+
+    <!-- A comment box: its file input sits in the page, hidden. -->
+    <form id="comment">
+      <div contenteditable="true"></div>
+      <button type="button" aria-label="Add a photo">+</button>
+      <input type="file" accept="image/*" hidden />
+      <output></output>
+    </form>
+
+    <!-- The media editor: the button opens a dialog with the file input in it. -->
+    <div id="editor">
+      <div contenteditable="true"></div>
+      <button aria-label="Add a photo">+</button>
+      <output></output>
+    </div>
+
+    <!-- A message box with no photo button: paste is left alone. -->
+    <div id="plain"><div contenteditable="true"></div></div>
+
+    <script>
+      const shows = (box) => (e) => {
+        box.querySelector('output').textContent = [...e.target.files].map((f) => `${f.name}:${f.type}`).join(',');
+      };
+
+      const post = document.getElementById('post');
+      post.querySelector('button').onclick = () => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        input.multiple = true;
+        input.addEventListener('change', shows(post));
+        input.click();
+      };
+
+      const comment = document.getElementById('comment');
+      const hidden = comment.querySelector('input');
+      hidden.addEventListener('change', shows(comment));
+      comment.querySelector('button').onclick = () => hidden.click();
+
+      const editor = document.getElementById('editor');
+      editor.querySelector('button').onclick = () => {
+        const dialog = document.createElement('div');
+        dialog.setAttribute('role', 'dialog');
+        dialog.innerHTML = '<label>Upload from computer<input type="file" accept="image/*" hidden></label>';
+        dialog.querySelector('input').addEventListener('change', shows(editor));
+        document.body.append(dialog);
+      };
+    </script>
+  </body>
+</html>

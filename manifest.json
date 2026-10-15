@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "cmdv",
+  "version": "1.0.0",
+  "description": "Paste images into LinkedIn posts, comments and messages with cmd+V.",
+  "homepage_url": "https://github.com/bestboyhq/cmdv",
+  "content_scripts": [
+    {
+      "matches": ["https://www.linkedin.com/*"],
+      "js": ["cmdv.js"],
+      "run_at": "document_start",
+      "world": "MAIN"
+    }
+  ]
+}
